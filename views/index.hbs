@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Optional: Bootstrap JavaScript and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Register</h2>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="batch">Batch</label>
+                <input type="text" class="form-control" id="batch" placeholder="Enter your Batch">
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="termsCheck">
+                <label class="form-check-label" for="termsCheck">I agree to the terms and conditions</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+    </div>
+
+    <!-- Inline JavaScript -->
+    <script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent the form from submitting
+
+    const fullName = document.getElementById('fullName').value;
+    const batch= document.getElementbyId('Batch').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const termsCheck = document.getElementById('termsCheck').checked;
+
+    if (!fullName || !email || !password || !confirmPassword) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+    }
+
+    if (!termsCheck) {
+        alert('You must agree to the terms and conditions.');
+        return;
+    }
+
+    // Creating an object with the form data
+    const formData = {
+        fullName: fullName,
+        batch:batch,
+        email: email,
+        password: password
+    };
+
+    // Sending the data to the server
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData) // Convert form data to JSON
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        alert('User registered successfully');
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+    </script>
+</body>
+
+</html>
