@@ -1,27 +1,40 @@
-document.querySelector('form').addEventListener('submit', function(e) {
+document.querySelector('form').addEventListener('submit', function (e) {
     e.preventDefault(); // Prevent the form from submitting
-    console.log("safeel");
-    
+
     const fullName = document.getElementById('fullName').value;
     const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const termsCheck = document.getElementById('termsCheck').checked;
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const batch = document.getElementById('batch').value;
+    const department = document.getElementById('department').value;
+    const address = document.getElementById('address').value;
 
-    if (!fullName || !email || !password || !confirmPassword) {
+    if (!fullName || !email || !phoneNumber || !batch || !department || !address) {
         alert('Please fill in all fields.');
         return;
     }
 
-    if (password !== confirmPassword) {
-        alert('Passwords do not match.');
-        return;
-    }
+    // Creating an object with the form data
+    const formData = {
+        fullName,
+        email,
+        phoneNumber,
+        batch,
+        department,
+        address
+    };
 
-    if (!termsCheck) {
-        alert('You must agree to the terms and conditions.');
-        return;
-    }
-
-    alert('Registration successful!');
+    // Sending the data to the server
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData) // Convert form data to JSON
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        alert('User registered successfully');
+    })
+    .catch(error => console.error('Error:', error));
 });

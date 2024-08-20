@@ -1,109 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Optional: Bootstrap JavaScript and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
     <div class="container mt-5">
         <h2 class="text-center">Register</h2>
         <form id="registrationForm">
             <div class="form-group">
                 <label for="fullName">Full Name</label>
-                <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
-            </div>
-            <div class="form-group">
-                <label for="batch">Batch</label>
-                <input type="text" class="form-control" id="batch" placeholder="Enter your Batch">
+                <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
             </div>
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" required>
             </div>
             <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password">
+                <label for="batch">Batch</label>
+                <select class="form-control" id="batch" required>
+                    <option value="" disabled selected>Choose an option</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                </select>
             </div>
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="termsCheck">
-                <label class="form-check-label" for="termsCheck">I agree to the terms and conditions</label>
+            <div class="form-group">
+                <label for="department">Department</label>
+                <select class="form-control" id="department" required>
+                    <option value="" disabled selected>Choose an option</option>
+                    <option value="CSE A">CSE A</option>
+                    <option value="CSE B">CSE B</option>
+                    <option value="CSE C">CSE C</option>
+                    <option value="ADS">ADS</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EEE">EEE</option>
+                    <option value="CIVIL">CIVIL</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" rows="3" placeholder="Enter your address" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Register</button>
         </form>
     </div>
 
-    <!-- Inline JavaScript -->
     <script>
-    document.querySelector('form').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent the form from submitting
+    document.getElementById('registrationForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent the form from submitting
 
-    const fullName = document.getElementById('fullName').value;
-    const batch= document.getElementbyId('Batch').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const termsCheck = document.getElementById('termsCheck').checked;
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const batch = document.getElementById('batch').value;
+        const department = document.getElementById('department').value;
+        const address = document.getElementById('address').value;
 
-    if (!fullName || !email || !password || !confirmPassword) {
-        alert('Please fill in all fields.');
-        return;
-    }
+        if (!fullName || !email || !phoneNumber || !batch || !department || !address) {
+            alert('Please fill in all fields.');
+            return;
+        }
 
-    if (password !== confirmPassword) {
-        alert('Passwords do not match.');
-        return;
-    }
+        const formData = {
+            fullName,
+            email,
+            phoneNumber,
+            batch,
+            department,
+            address
+        };
 
-    if (!termsCheck) {
-        alert('You must agree to the terms and conditions.');
-        return;
-    }
-
-    // Creating an object with the form data
-    const formData = {
-        fullName: fullName,
-        batch:batch,
-        email: email,
-        password: password
-    };
-
-    // Sending the data to the server
-    fetch('/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData) // Convert form data to JSON
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log(data);
-        alert('User registered successfully');
-    })
-    .catch(error => console.error('Error:', error));
-});
-
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            alert('User registered successfully');
+        })
+        .catch(error => console.error('Error:', error));
+    });
     </script>
 </body>
-
 </html>

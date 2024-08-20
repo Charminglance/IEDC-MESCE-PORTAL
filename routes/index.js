@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+// Route to render the home page
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'IEDC' });
 });
@@ -21,17 +22,22 @@ router.post('/login', function(req, res, next) {
   res.redirect('/');
 });
 
+// Handle registration form submission
 router.post('/register', (req, res) => {
-  const { fullName, email, password } = req.body;
-  console.log(fullName);
-  console.log(batch);
-  console.log(email);
-  console.log(password);
-  
+  const { fullName, email, phoneNumber, batch, department, address } = req.body;
+
+  // Log the data to the console
+  console.log('Full Name:', fullName);
+  console.log('Email:', email);
+  console.log('Phone Number:', phoneNumber);
+  console.log('Batch:', batch);
+  console.log('Department:', department);
+  console.log('Address:', address);
+
   // Logic to save the user in the database
-  // Example: User.create({ username, email, password });
-  console.log("registerd");
-  
+  // Example: User.create({ fullName, email, phoneNumber, batch, department, address });
+
+  console.log("User registered successfully");
   res.send('User registered successfully');
 });
 
