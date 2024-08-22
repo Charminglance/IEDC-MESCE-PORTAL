@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Route to render the home page
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'IEDC' });
+  res.render('register', { title: 'IEDC' });
 });
 
 // Route to render the login page

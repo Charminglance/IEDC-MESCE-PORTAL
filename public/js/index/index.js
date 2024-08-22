@@ -1,40 +1,45 @@
-document.querySelector('form').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent the form from submitting
+var express = require('express');
+var router = express.Router();
 
-    const fullName = document.getElementById('fullName').value;
-    const email = document.getElementById('email').value;
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    const batch = document.getElementById('batch').value;
-    const department = document.getElementById('department').value;
-    const address = document.getElementById('address').value;
-
-    if (!fullName || !email || !phoneNumber || !batch || !department || !address) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    // Creating an object with the form data
-    const formData = {
-        fullName,
-        email,
-        phoneNumber,
-        batch,
-        department,
-        address
-    };
-
-    // Sending the data to the server
-    fetch('/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData) // Convert form data to JSON
-    })
-    .then(response => response.text())
-    .then(data => {
-        console.log(data);
-        alert('User registered successfully');
-    })
-    .catch(error => console.error('Error:', error));
+// Route to render the home page
+router.get('/', function(req, res, next) {
+  res.render('register', { title: 'IEDC' });
 });
+
+// Route to render the login page
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'LOGIN PAGE' });
+});
+
+// Handle login form submission
+router.post('/login', function(req, res, next) {
+  const { username, password } = req.body;
+  
+
+  // Log the credentials
+  console.log(Username: ${username}, Password: ${password});
+
+  // Redirect to the home page or another page
+  res.redirect('/');
+});
+
+// Handle registration form submission
+router.post('/register', (req, res) => {
+  const { fullName, email, phoneNumber, batch, department, address } = req.body;
+
+  // Log the data to the console
+  console.log('Full Name:', fullName);
+  console.log('Email:', email);
+  console.log('Phone Number:', phoneNumber);
+  console.log('Batch:', batch);
+  console.log('Department:', department);
+  console.log('Address:', address);
+
+  // Logic to save the user in the database
+  // Example: User.create({ fullName, email, phoneNumber, batch, department, address });
+
+  console.log("User registered successfully");
+  res.send('User registered successfully');
+});
+
+module.exports = router;
