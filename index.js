@@ -1,9 +1,14 @@
-var express = require('express');
-var path = require('path');
-var indexRouter = require('./routes/index');
-var app = express();
+const express = require('express');
+const path = require('path');
+const indexRouter = require('./routes/index');
+const db = require('./config/connection');
 
-// view engine setup
+const app = express();
+
+// Connect to the database
+db.connectToDatabase();
+
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -15,18 +20,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 
 // Catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.status(404).send('Sorry, can’t find that!');
 });
 
 // Error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
 // Start server
-app.listen(3000, function() {
+app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 
