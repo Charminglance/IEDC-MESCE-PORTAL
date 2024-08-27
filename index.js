@@ -2,11 +2,13 @@ const express = require('express');
 const path = require('path');
 const indexRouter = require('./routes/index');
 const db = require('./config/connection');
+require('dotenv').config(); // Load environment variables
+
 
 const app = express();
 
-// Connect to the database
-db.connectToDatabase();
+// Connect to the database using the environment variable
+db.connectToDatabase(process.env.MONGO_URI); // Update this if necessary
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));

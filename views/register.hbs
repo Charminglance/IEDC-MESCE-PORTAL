@@ -109,12 +109,12 @@
             body: JSON.stringify(formData)
         })
         .then(response => response.text())
-        .then(data => {
-            console.log(data);
-            alert('User registered successfully');
-        })
-        .catch(error => console.error('Error:', error));
-    });
+  .then(data => {
+    console.log(data);
+    alert(data); // Show the actual response message from the server
+  })
+  .catch(error => console.error('Error:', error));
+});
     </script>
 </body>
 </html>

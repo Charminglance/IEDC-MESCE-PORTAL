@@ -4,10 +4,7 @@ const uri = 'mongodb://localhost:27017/iedcmesce-portal';
 
 async function connectToDatabase() {
   try {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri);
     console.log('Connected successfully to database');
   } catch (err) {
     console.error('Database connection error:', err);

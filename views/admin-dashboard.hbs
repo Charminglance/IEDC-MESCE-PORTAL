@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa; /* Light grey background */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Beautiful font */
+      min-height: 100vh; /* Ensure body takes full height of the viewport */
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      margin-top: 40px;
+      background-color: white; /* Keep background white */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for the container */
+      flex: 1; /* Allow the container to grow and push the footer down */
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #343a40; /* Dark grey color for heading */
+    }
+    .table th, .table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    .table th {
+      background-color: #e9ecef;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+    }
+    .alert {
+      margin-bottom: 20px;
+    }
+    .btn-success, .btn-danger {
+      width: 80px;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    .btn-success:hover, .btn-danger:hover {
+      transform: scale(1.1); /* Slight zoom effect on hover */
+    }
+    footer {
+      text-align: center;
+      padding: 10px 0;
+      background-color: #343a40;
+      color: white;
+      margin-top: 50px; /* Added margin to push footer down */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center">{{title}}</h1>
+    
+    <!-- Display success or error messages -->
+    {{#if query.message}}
+      <div class="alert alert-info" role="alert">
+        {{query.message}}
+      </div>
+    {{/if}}
+    
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Full Name</th>
+          <th>Batch</th>
+          <th>Department</th>
+          <th>Address</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each registrations}}
+        <tr>
+          <td>{{this.email}}</td>
+          <td>{{this.phoneNumber}}</td>
+          <td>{{this.fullName}}</td>
+          <td>{{this.batch}}</td>
+          <td>{{this.department}}</td>
+          <td>{{this.address}}</td>
+          <td>
+            <div class="btn-group" role="group">
+              <!-- Use JavaScript for confirmation prompt before action -->
+              <form action="/admin-action" method="POST" onsubmit="return confirmAction(this);">
+                <input type="hidden" name="userId" value="{{this._id}}">
+                <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
+                <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function confirmAction(form) {
+      // Get the action from the button pressed
+      const action = form.action.value;
+
+      // Display confirmation prompt
+      if (action === 'accept') {
+        return confirm('Are you sure you want to accept this user?');
+      } else if (action === 'reject') {
+        return confirm('Are you sure you want to reject this user?');
+      }
+
+      // Default action
+      return true;
+    }
+  </script>
+</body>
+</html>
