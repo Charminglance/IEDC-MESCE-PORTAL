@@ -5,25 +5,29 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
-      background-color: #f8f9fa; /* Light grey background */
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Beautiful font */
-      min-height: 100vh; /* Ensure body takes full height of the viewport */
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     .container {
-      margin-top: 40px;
-      background-color: white; /* Keep background white */
-      padding: 20px;
+      margin-top: 20px;
+      background-color: white;
+      padding: 15px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for the container */
-      flex: 1; /* Allow the container to grow and push the footer down */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex: 1;
     }
     h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 700;
-      margin-bottom: 30px;
-      color: #343a40; /* Dark grey color for heading */
+      margin-bottom: 20px;
+      color: #343a40;
+      text-align: center;
+    }
+    .table-responsive {
+      margin-bottom: 20px;
     }
     .table th, .table td {
       text-align: center;
@@ -45,20 +49,31 @@
       transition: transform 0.2s;
     }
     .btn-success:hover, .btn-danger:hover {
-      transform: scale(1.1); /* Slight zoom effect on hover */
+      transform: scale(1.1);
     }
     footer {
       text-align: center;
       padding: 10px 0;
       background-color: #343a40;
       color: white;
-      margin-top: 50px; /* Added margin to push footer down */
+      margin-top: 50px;
+    }
+    @media (max-width: 576px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .btn-success, .btn-danger {
+        width: 70px;
+      }
+      .container {
+        padding: 10px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="text-center">{{title}}</h1>
+    <h1>{{title}}</h1>
     
     <!-- Display success or error messages -->
     {{#if query.message}}
@@ -66,58 +81,63 @@
         {{query.message}}
       </div>
     {{/if}}
-    
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Phone Number</th>
-          <th>Full Name</th>
-          <th>Batch</th>
-          <th>Department</th>
-          <th>Address</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each registrations}}
-        <tr>
-          <td>{{this.email}}</td>
-          <td>{{this.phoneNumber}}</td>
-          <td>{{this.fullName}}</td>
-          <td>{{this.batch}}</td>
-          <td>{{this.department}}</td>
-          <td>{{this.address}}</td>
-          <td>
-            <div class="btn-group" role="group">
-              <!-- Use JavaScript for confirmation prompt before action -->
-              <form action="/admin-action" method="POST" onsubmit="return confirmAction(this);">
-                <input type="hidden" name="userId" value="{{this._id}}">
-                <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
-                <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
-              </form>
-            </div>
-          </td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Full Name</th>
+            <th>Batch</th>
+            <th>Department</th>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each registrations}}
+          <tr>
+            <td>{{this.email}}</td>
+            <td>{{this.phoneNumber}}</td>
+            <td>{{this.fullName}}</td>
+            <td>{{this.batch}}</td>
+            <td>{{this.department}}</td>
+            <td>{{this.address}}</td>
+            <td>
+              <div class="btn-group" role="group">
+                <!-- Use JavaScript for confirmation prompt before action -->
+                <form action="/admin-action" method="POST" class="admin-action-form">
+                  <input type="hidden" name="userId" value="{{this._id}}">
+                  <input type="hidden" name="action" id="actionInput">
+                  <button type="button" class="btn btn-success" onclick="confirmAction('accept', this)">Accept</button>
+                  <button type="button" class="btn btn-danger" onclick="confirmAction('reject', this)">Reject</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
-    function confirmAction(form) {
-      // Get the action from the button pressed
-      const action = form.action.value;
+    function confirmAction(action, btn) {
+      let confirmationMessage = '';
 
-      // Display confirmation prompt
       if (action === 'accept') {
-        return confirm('Are you sure you want to accept this user?');
+        confirmationMessage = 'Are you sure you want to accept this user?';
       } else if (action === 'reject') {
-        return confirm('Are you sure you want to reject this user?');
+        confirmationMessage = 'Are you sure you want to reject this user?';
       }
 
-      // Default action
-      return true;
+      if (confirm(confirmationMessage)) {
+        // Set the action in the hidden input field
+        const form = btn.closest('form');
+        form.querySelector('#actionInput').value = action;
+        form.submit();
+      }
     }
   </script>
 </body>
