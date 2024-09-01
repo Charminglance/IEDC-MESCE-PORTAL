@@ -2,13 +2,13 @@ const express = require('express');
 const path = require('path');
 const indexRouter = require('./routes/index');
 const db = require('./config/connection');
+const session = require('express-session');
 require('dotenv').config(); // Load environment variables
-
 
 const app = express();
 
 // Connect to the database using the environment variable
-db.connectToDatabase(process.env.MONGO_URI); // Update this if necessary
+db.connectToDatabase(process.env.MONGO_URI); // Ensure this handles connection errors
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -17,6 +17,18 @@ app.set('view engine', 'hbs');
 // Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Configure session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'iedcmesce', // Use an environment variable for the secret
+  resave: false,
+  saveUninitialized: true,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', // Secure cookie in production
+    maxAge: 3600000 // 1 hour session timeout in milliseconds
+  },
+}));
+
 
 // Define routes
 app.use('/', indexRouter);
@@ -33,8 +45,9 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+const PORT = process.env.PORT || 3000; // Use an environment variable for the port
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;

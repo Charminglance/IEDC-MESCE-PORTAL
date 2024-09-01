@@ -1,36 +1,39 @@
-const bcrypt = require('bcrypt'); // Add this line
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
-const Admin = require('../models/admin'); // Import the new Admin model
+const Admin = require('../models/admin');
 const Member = require('../models/member');
 
 // Function to handle user registration
 const doregister = async (data) => {
-    try {
-      // Check if user with the same email or phone number already exists
-      const existingUser = await User.findOne({
-        $or: [{ email: data.email }, { phoneNumber: data.phoneNumber }],
-      });
-  
-      if (existingUser) {
-        console.log('User already exists:', existingUser.email, existingUser.phoneNumber);
-        return false; // User already exists
-      }
-  
-      // Create new user
-      const newUser = new User({
-        ...data,
-        role: 'registration', // Ensure this role is set for new users
-      });
-  
-      await newUser.save();
-      console.log('New user registered:', newUser.email);
-      return true; // Registration successful
-    } catch (error) {
-      console.error('Error during registration:', error);
-      return false; // Registration failed
+  try {
+    // Check if user with the same email or phone number already exists in User or Member collection
+    const existingUser = await User.findOne({
+      $or: [{ email: data.email }, { phoneNumber: data.phoneNumber }],
+    });
+
+    const existingMember = await Member.findOne({
+      $or: [{ email: data.email }, { phoneNumber: data.phoneNumber }],
+    });
+
+    if (existingUser || existingMember) {
+      console.log('User already exists:', data.email, data.phoneNumber);
+      return false; // User already exists
     }
-  };
-  
+
+    // Create new user
+    const newUser = new User({
+      ...data,
+      role: 'registration', // Ensure this role is set for new users
+    });
+
+    await newUser.save();
+    console.log('New user registered:', newUser.email);
+    return true; // Registration successful
+  } catch (error) {
+    console.error('Error during registration:', error);
+    return false; // Registration failed
+  }
+};
 
 // Function to move approved registrations to 'members'
 async function moveDataToMembers() {
