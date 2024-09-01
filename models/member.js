@@ -8,6 +8,7 @@ const memberSchema = new mongoose.Schema({
   batch: String,
   department: String,
   address: String,
+  password: { type: String, required: true }, // Add password field
 });
 
 const Member = mongoose.model('Member', memberSchema);

@@ -11,12 +11,21 @@
         .navbar {
             background-color: #ffffff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 60px; /* Fixed height for navbar */
+            padding: 0 20px; /* Add some padding */
         }
 
         .navbar .navbar-brand {
             color: #333;
             font-weight: bold;
-            font-size: 24px; /* Increase font size */
+            font-size: 24px; /* Adjust font size */
+            display: flex; /* Flex to align logo and text */
+            align-items: center;
+        }
+
+        .navbar .navbar-brand img {
+            height: 30px; /* Adjust height for larger logo */
+            margin-right: 15px; /* Space between logo and text */
         }
 
         .navbar .navbar-nav .nav-link {
@@ -36,7 +45,7 @@
         }
 
         .container {
-            margin-top: 60px; /* Adjust for fixed navbar */
+            margin-top: 80px; /* Adjust for fixed navbar */
         }
     </style>
 </head>
@@ -45,7 +54,10 @@
     <!-- White Navbar with Shadow -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">IEDC MESCE</a>
+            <a class="navbar-brand" href="/">
+                <img src="https://i.postimg.cc/vHBTJ6S2/1.png" alt="IEDC MESCE Logo"> <!-- Replace with relative path -->
+                IEDC MESCE
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

@@ -109,9 +109,12 @@ router.post('/admin-action', sessionChecker, async (req, res) => {
         }
 
         if (action === 'accept') {
+            // Generate login credentials
             const registrationNumber = user.email.split('@')[0];
             const password = `${registrationNumber}#iedcmesce`;
 
+            // Create a new member document with hashed password
+            const hashedPassword = await bcrypt.hash(password, 10);
             const member = new Member({
                 email: user.email,
                 phoneNumber: user.phoneNumber,
@@ -120,11 +123,14 @@ router.post('/admin-action', sessionChecker, async (req, res) => {
                 batch: user.batch,
                 department: user.department,
                 address: user.address,
+                password: hashedPassword, // Store the hashed password
             });
 
+            // Save the member document to the 'members' collection
             await member.save();
             await User.findByIdAndDelete(userId);
 
+            // Send the login credentials to the user via email
             await sendEmail(
               user.email,
               'Welcome to IEDC MES College of Engineering - Your Login Credentials',
@@ -152,7 +158,7 @@ router.post('/admin-action', sessionChecker, async (req, res) => {
                       <p style="font-size: 0.9em; color: #666;">*This is an automated message. Please do not reply.*</p>
                   </body>
               </html>`
-          );
+            );
 
             res.redirect('/admin-dashboard?message=User accepted and email sent.');
         } else if (action === 'reject') {

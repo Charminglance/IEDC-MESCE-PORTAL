@@ -42,7 +42,7 @@ async function moveDataToMembers() {
     const registrations = await User.find({ role: 'registration' });
 
     for (const user of registrations) {
-      // Create a new member document
+      // Create a new member document with the user's data
       const member = new Member({
         email: user.email,
         phoneNumber: user.phoneNumber,
@@ -51,6 +51,7 @@ async function moveDataToMembers() {
         batch: user.batch,
         department: user.department,
         address: user.address,
+        password: user.password, // Copy the password from user to member
       });
 
       // Save the member document to the 'members' collection
